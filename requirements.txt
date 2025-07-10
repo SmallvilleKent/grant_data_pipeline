@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+pdfplumber
+openai
+gspread
+google-auth
+python-dotenv
