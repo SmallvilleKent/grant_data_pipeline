@@ -13,7 +13,11 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Google Sheets setup
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
 creds = Credentials.from_service_account_info(
     json.loads(os.getenv("GOOGLE_CREDS_JSON")), scopes=SCOPES
 )
