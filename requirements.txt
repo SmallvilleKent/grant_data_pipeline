@@ -1,7 +1,7 @@
 requests
 beautifulsoup4
 pdfplumber
-openai
+openai==0.28
 gspread
 google-auth
 python-dotenv
