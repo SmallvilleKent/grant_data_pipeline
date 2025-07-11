@@ -3,14 +3,16 @@ import json
 import requests
 from bs4 import BeautifulSoup
 import pdfplumber
-import openai
+#import openai
+import groq
 import gspread
 from google.oauth2.service_account import Credentials
 from dotenv import load_dotenv
 
 # Load .env for local testing
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# openai.api_key = os.getenv("OPENAI_API_KEY")
+groq.api_key = os.getenv("GROQ_API_KEY")
 
 # Google Sheets setup
 SCOPES = [
@@ -62,10 +64,14 @@ Document:
 {text[:4000]}
 \"\"\"
 """
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+    response = groq.ChatCompletion.create(  # Replace with actual Groq API call if different
+        model="llama-2-70b-chat",           # Use the appropriate Groq model name
         messages=[{"role": "user", "content": prompt}],
     )
+    # response = openai.ChatCompletion.create(
+    #     model="gpt-3.5-turbo",
+    #     messages=[{"role": "user", "content": prompt}],
+    # )
     return json.loads(response.choices[0].message['content'])
 
 def update_sheet(data):

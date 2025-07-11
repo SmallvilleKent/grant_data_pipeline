@@ -23,6 +23,7 @@ jobs:
 
     - name: Run pipeline
       env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+       ## OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_CREDS_JSON }}
       run: python run_pipeline.py
