@@ -49,8 +49,9 @@ def extract_text_from_pdf(url):
     return text
 
 def extract_structured_data(text):
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
     prompt = f"""
-You are an expert grant extractor.
+You are an expert grant extractor. 
 Extract the following fields as JSON:
 - funder_name
 - grant_amount
@@ -64,15 +65,25 @@ Document:
 {text[:4000]}
 \"\"\"
 """
-    response = groq.ChatCompletion.create(  # Replace with actual Groq API call if different
-        model="llama-2-70b-chat",           # Use the appropriate Groq model name
-        messages=[{"role": "user", "content": prompt}],
-    )
-    # response = openai.ChatCompletion.create(
-    #     model="gpt-3.5-turbo",
-    #     messages=[{"role": "user", "content": prompt}],
-    # )
-    return json.loads(response.choices[0].message['content'])
+
+    url = "https://api.groq.com/openai/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": "llama3-70b-8192",  # or "mixtral-8x7b-32768"
+        "messages": [
+            {"role": "user", "content": prompt}
+        ]
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()
+    data = response.json()
+    content = data["choices"][0]["message"]["content"]
+    print("Groq returned:", content)  # debug print
+    return json.loads(content)
 
 def update_sheet(data):
     sheet.append_row([
