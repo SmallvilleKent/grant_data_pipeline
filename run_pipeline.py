@@ -28,7 +28,7 @@ sheet = gc.open("Grants Data").sheet1
 
 # Example sources
 SOURCES = [
-    {"type": "html", "url": "https://grants.nih.gov/grants/guide/pa-files/PA-20-185.html"}
+    {"type": "html", "url": "https://open.canada.ca/data/en/api/3/action/datastore_search?resource_id=1d15a62f-5656-49ad-8c88-f40ce689d831"}
 ]
 
 def extract_text_from_html(url):
