@@ -49,6 +49,8 @@ def extract_text_from_pdf(url):
     return text
 
 def extract_structured_data(text):
+    import re
+
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
     prompt = f"""
 You are an expert grant extractor. 
@@ -83,7 +85,21 @@ Document:
     data = response.json()
     content = data["choices"][0]["message"]["content"]
     print("Groq returned:", content)  # debug print
-    return json.loads(content)
+
+    # Try to extract JSON block from markdown or text
+    match = re.search(r"\{[\s\S]*?\}", content)
+    if match:
+        json_str = match.group(0)
+        return json.loads(json_str)
+    else:
+        # fallback: return all fields as null
+        return {
+            "funder_name": None,
+            "grant_amount": None,
+            "deadline": None,
+            "eligibility": None,
+            "url": None
+        }
 
 def update_sheet(data):
     sheet.append_row([
